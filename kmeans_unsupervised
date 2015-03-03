@@ -1,0 +1,91 @@
+% unsupervised k means algorithm%
+
+fprintf('welcome to unsupervised clustering module (k-means)\n');
+da=input('please enter the name of the datafile in single quotes\n');
+d=load(da);
+s=size(d);
+l=s(1,1);
+b=s(1,2);
+fprintf('there are %i datapoints with %i dimensions\n',l,b);
+K=input('how many clusters do you want to create ?\n');
+%ite=input('how many iterations do you want to run?\n');
+centroids=rand(K,b);
+%x=normalize(d);
+x=d;
+dist_mat=zeros(l,K);
+clusterlabel=zeros(l,1);
+newcent=zeros(K,b);
+while 1
+    
+    newcent=centroids;
+for i=1:l
+    for j=1:K
+        dist_mat(i,j)=euclid_dist(x(i,:),centroids(j,:));%find the euclidian distance between the chosen point and all the randoly initialized centroids
+        
+        
+    end
+  
+    
+   
+end
+
+
+ % disp(dist_mat);
+ h=zeros(1,K);
+ 
+ %assign each data point to nearest centroid cluster
+ for i=1:l
+     h=dist_mat(i,:);
+     %disp(h);
+     [max_value, index] = min(h(:));
+     clusterlabel(i,1)=index;
+ end
+ 
+ disp(clusterlabel);
+ temp_avg=zeros(K,b);
+ count=0;
+ %update all the centroids
+ for i=1:l
+     
+     for j=1:K
+         if clusterlabel(i,1)==j
+             temp_avg(j,:)=temp_avg(j,:)+x(i,:);
+             count=count+1;
+             centroids=(1/count).*temp_avg;
+             
+         end
+         
+         
+     end
+     
+     
+     
+ end
+ 
+ if newcent-centroids==0
+     break;
+ end
+ 
+end
+fprintf(' the final centroids are :\n');
+ disp(centroids);
+ fprintf('\n');
+ fprintf('the following clusters were formed...\n');
+ for i=1:K
+    fprintf(' cluster %i\n',i);
+    for j=1:l
+       if clusterlabel(j,1)==i
+           fprintf('data-poiint %i \t',j);
+           disp(x(j,:));
+       end
+    end
+        
+        
+        
+ end
+     
+     
+     
+     
+     
+ 
